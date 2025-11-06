@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from .models import Conference
 from .forms import ConferenceModel
 from django.views.generic import ListView, DetailView,CreateView,UpdateView,DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 def all_conferences(req):
     conferences=Conference.objects.all()
@@ -18,14 +19,14 @@ class ConferenceDetails(DetailView):
     template_name ="conference/detail.html"
     context_object_name ="conference"
 
-class ConferenceCreate(CreateView):
+class ConferenceCreate(LoginRequiredMixin,CreateView):
     model=Conference
     template_name ="conference/conference_form.html"
     #fields ="__all__"
     form_class =ConferenceModel
     success_url = reverse_lazy("conference_liste")
 
-class ConferenceUpdate(UpdateView):
+class ConferenceUpdate(LoginRequiredMixin,UpdateView):
     model= Conference
     template_name ="conference/conference_form.html"
     #fields ="__all__"
@@ -33,7 +34,7 @@ class ConferenceUpdate(UpdateView):
     success_url = reverse_lazy("conference_liste")
 
 
-class ConferenceDelete(DeleteView):
+class ConferenceDelete(LoginRequiredMixin,DeleteView):
     model= Conference
     template_name= "conference/conference_confirm_delete.html"
     success_url =reverse_lazy("conference_liste")

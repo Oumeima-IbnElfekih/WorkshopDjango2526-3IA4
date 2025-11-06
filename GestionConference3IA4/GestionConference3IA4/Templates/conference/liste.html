@@ -13,8 +13,10 @@
         <td>{{c.location}}</td>
         <td>
             <a href="{%  url 'conference_detail' c.pk %}">détails</a> <br></br>
+            {% if user.is_authenticated and user.role == "commitee" %}
              <a href="{%  url 'conference_edit' c.pk %}">Modifier</a>
               <a href="{%  url 'conference_delete' c.pk %}">Supprimer</a>
+              {% endif %}
         </td>
     </tr>
 {% endfor %}
