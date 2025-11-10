@@ -1,24 +1,41 @@
 {% extends "base.html" %}
+{% block title %}Liste des conférences{% endblock %}
 {% block content %}
-<h2>la liste des conferences</h2>
-<table border="1">
-    <tr>
-        <td>title </td>
-        <td>location </td>
-        <td>Actions</td>
-    </tr>
-{% for c in liste  %}
-    <tr>
-        <td>{{c.name}}</td>
-        <td>{{c.location}}</td>
-        <td>
-            <a href="{%  url 'conference_detail' c.pk %}">détails</a> <br></br>
-            {% if user.is_authenticated and user.role == "commitee" %}
-             <a href="{%  url 'conference_edit' c.pk %}">Modifier</a>
-              <a href="{%  url 'conference_delete' c.pk %}">Supprimer</a>
-              {% endif %}
-        </td>
-    </tr>
-{% endfor %}
+<h2 class="mb-4">Liste des conférences</h2>
+
+
+    <a href="{% url 'conference_add' %}" class="btn btn-primary mb-3">+ Nouvelle conférence</a>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Thème</th>
+            <th>Dates</th>
+            <th>Lieu</th>
+           
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for conf in liste %}
+        <tr>
+            <td>{{ conf.name }}</td>
+            <td>{{ conf.theme }}</td>
+            <td>{{ conf.start_date }} → {{ conf.end_date }}</td>
+            <td>{{ conf.location }}</td>
+            <td>
+                <a href="{% url 'conference_detail' conf.pk %}" class="btn btn-info btn-sm">Détails</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'conference_edit' conf.pk %}" class="btn btn-warning btn-sm">Modifier</a>
+                    <a href="{% url 'conference_delete' conf.pk %}" class="btn btn-danger btn-sm">Supprimer</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6" class="text-center">Aucune conférence trouvée.</td></tr>
+    {% endfor %}
+    </tbody>
 </table>
 {% endblock %}
